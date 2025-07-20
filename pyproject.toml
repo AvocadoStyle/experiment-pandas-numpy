@@ -1,0 +1,39 @@
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra -q"
+testpaths = ["tests"]
+log_level = "INFO"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks integration tests",
+    "smoke: marks smoke tests"
+    , "sanity: marks sanity tests",
+    "regression: marks regression tests",
+    "longrun: marks long-running tests"
+]
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+mypy = "^1.8.0"
+ruff = "^0.2.2"
+pre-commit = "^3.6.1"
+jupyterlab = "^4.4.5"
+
+[tool.poetry]
+name = "pandas-and-numpy"
+version = "0.1.0"
+description = ""
+authors = ["Eden Refael <eden.r@solaredge.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.11.0"
+pandas = ">=2.3.1,<3.0.0"
+numpy = ">=2.3.1,<3.0.0"
+matplotlib = ">=3.10.3,<4.0.0"
+seaborn = ">=0.13.2,<0.14.0"
+scikit-learn = ">=1.7.0,<2.0.0"
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

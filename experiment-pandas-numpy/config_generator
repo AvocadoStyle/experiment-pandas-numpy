@@ -1,0 +1,67 @@
+from enum import Enum
+import json 
+import os
+from typing import Any
+
+
+
+config_test_cl_ss_v_out_path = os.path.join(os.getcwd(), 'experiment-pandas-numpy', 'db', 'config_test_cl_ss_v_out.json') # gets the abs path.
+
+
+class RangeIterator(Enum):
+    START = "start" 
+    END = "end"
+    STEP = "step"
+    
+
+
+def config_to_dictionary():
+    """
+    Reads the config file and returns its content as a dictionary.
+    """
+    with open(config_test_cl_ss_v_out_path, 'r') as config_file:
+        config_data = json.load(config_file)
+        return config_data
+
+def generate_wps(config_data: dict):
+    pass
+
+def is_flat_needed(item: dict[Any, Any] | list[float]):
+    """
+    Checks if flat needed, 
+    * If it's dict type
+    * if it is dict with the following format of RangeItereator.
+    """
+    return isinstance(item, dict) and all(
+        required_key in item for required_key in [RangeIterator.START.value, RangeIterator.END.value, RangeIterator.STEP.value]) # whole RangeIterator inside the items
+
+def generate_flatting(item: dict[Any, Any]) -> list[float]:
+    li = []
+    for val in range(item[RangeIterator.START.value], item[RangeIterator.END.value], item[RangeIterator.STEP.value]):
+        li.append(float(val))
+    return li
+
+def generate_flattened_steps(config_data: dict) -> dict[str, float]:
+    """
+    Generates a list of valid work packages (wps) based on the provided configuration data.
+    """
+    # main running
+    for k, v in config_data.items():
+        # check if flat needed & if it's in a good flatting format.
+        if is_flat_needed(v):
+            config_data[k] = generate_flatting(v)
+    return config_data
+
+
+if __name__ == "__main__":
+    # gets the unflattened config file 
+    config_data = config_to_dictionary()
+
+    # going to flatten the config_data
+    config_data_dict_flattened = generate_flattened_steps(config_data)
+
+    print(f"config_dict id: {id(config_data)}, config_dict_flattened id: {id(config_data_dict_flattened)}"
+          f" And does it equal? {id(config_data) == id(config_data_dict_flattened)}")
+
+
+    print(config_data)  # Print the dictionary to verify its content
